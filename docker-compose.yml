@@ -2,18 +2,21 @@
 services:
   api:
     depends_on:
-      - database
-    container_name: ToroInvestimentosBackend
-    image: 'toroinvestimentos-backend'
+      postgres: 
+          condition: service_healthy
+    container_name: toro-api
+    image: toroinvestimentos-backend
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ToroInvestimentos.Backend.API/Dockerfile
     ports:
       - "5000:5000"
+    expose:
+      - "5000"
     networks:
-      - aspnetcoreapp-network
-  database:
-    container_name: PostgresDB
+      - torobackend-network
+  postgres:
+    container_name: postgres
     image: postgres:latest
     ports:
         - '5432:5432'
@@ -22,9 +25,14 @@ services:
     environment:
       - POSTGRES_USER=postgres 
       - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
-      - aspnetcoreapp-network
+      - torobackend-network
       
 networks:
-  aspnetcoreapp-network:
+  torobackend-network:
     driver: bridge
