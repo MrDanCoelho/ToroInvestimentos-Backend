@@ -13,6 +13,8 @@ Alternativelly, you can build a Docker image with the docker-compose file that c
 
 The default swagger endpoint is "http://localhost:5000/swagger"
 
+To run Unit Tests, just run the command: "dotnet test ToroInvestimentos.Backend.Test"
+
 --ADDITIONAL INFO--
 
 The project uses Dapper to make the database queries and FluentMigrator to make the migrations. Of course, migrations are not a good idea to be used in a production environment, but for the purpose of this project
